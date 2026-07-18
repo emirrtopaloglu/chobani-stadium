@@ -1946,7 +1946,7 @@
 
       /* ---------- lights ---------- */
       scene.add(new THREE.HemisphereLight(0x35507e, 0x05070d, 0.55));
-      scene.add(new THREE.AmbientLight(0x27314a, 0.35));
+      scene.add(new THREE.AmbientLight(0x354466, 0.65));
       const floodTargets = new THREE.Object3D();
       floodTargets.position.set(0, 0, 0);
       scene.add(floodTargets);
@@ -1971,7 +1971,7 @@
       const fieldGlow = new THREE.PointLight(0xbcd8ff, 0.35, 160, 2);
       fieldGlow.position.set(0, 22, 0);
       scene.add(fieldGlow);
-      const sun = new THREE.DirectionalLight(0xdfe9ff, 0.3);
+      const sun = new THREE.DirectionalLight(0xdfe9ff, 0.65);
       sun.position.set(70, 90, 45);
       sun.castShadow = true;
       sun.shadow.mapSize.set(1024, 1024);
@@ -3463,10 +3463,7 @@
         ped.translate(0, 0.2, 0.02);
         return mergeBoxes([pan, back, ped]);
       })();
-      const seatMat = new THREE.MeshPhongMaterial({
-        shininess: 38,
-        specular: 0x2c333f,
-      }); // plastic sheen
+      const seatMat = new THREE.MeshLambertMaterial(); // diffuse lambert material for absolute color accuracy without washing reflections
 
       /* first pass counts seats and records layout */
       const layout = []; // per tier: rows -> table + per-section seat counts
@@ -3557,6 +3554,27 @@
                 const x = pt.x,
                   z = pt.z;
                 const yaw = Math.atan2(-x, -z);
+
+                const isBannerSection = (ti === 1 && label === 214);
+                if (isBannerSection) {
+                  dummy.position.set(0, -9999, 0);
+                  dummy.updateMatrix();
+                  seatMesh.setMatrixAt(idx, dummy.matrix);
+                  pickMesh.setMatrixAt(idx, dummy.matrix);
+                  meta.pos[idx * 3] = 0;
+                  meta.pos[idx * 3 + 1] = -9999;
+                  meta.pos[idx * 3 + 2] = 0;
+                  meta.yaw[idx] = 0;
+                  meta.row[idx] = r + 1;
+                  meta.seatNum[idx] = q + 1;
+                  meta.secIdx[idx] = sections.length;
+                  meta.rowStart[idx] = rowStart;
+                  meta.rowCount[idx] = rowCount;
+                  meta.avail[idx] = 1;
+                  idx++;
+                  continue;
+                }
+
                 dummy.position.set(x, R.y, z);
                 dummy.rotation.set(0, yaw, 0);
                 dummy.updateMatrix();
@@ -3634,6 +3652,54 @@
         if (seatMesh.instanceColor) seatMesh.instanceColor.needsUpdate = true;
       }
       scene.add(seatMesh);
+      /* ---------- section tifo/banner overlay builder ---------- */
+      function sectionStrip(rx1, rz1, y1, rx2, rz2, y2, a0, a1, seg, mat) {
+        const pos = [], uv = [], idx = [];
+        for (let i = 0; i <= seg; i++) {
+          const a = a0 + (i / seg) * (a1 - a0);
+          const pt1 = stCoord(a, rx1, rz1);
+          const pt2 = stCoord(a, rx2, rz2);
+          // Z-fighting'ı önlemek için basamakların 0.15m üzerinde çizilir
+          pos.push(pt1.x, y1 + 0.15, pt1.z, pt2.x, y2 + 0.15, pt2.z);
+          uv.push(i / seg, 0, i / seg, 1);
+        }
+        for (let i = 0; i < seg; i++) {
+          const k = i * 2;
+          idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3);
+        }
+        const g = new THREE.BufferGeometry();
+        g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+        g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+        g.setIndex(idx);
+        g.computeVertexNormals();
+        const m = new THREE.Mesh(g, mat);
+        m.matrixAutoUpdate = false;
+        return m;
+      }
+
+      // Blok 214 üzerinde dev Türk Bayrağı / Atatürk görseli (Tifo Banner) oluşturma
+      try {
+        const sec214 = sections.find(s => s.label === 214);
+        if (sec214) {
+          const t = TIERS[sec214.tier];
+          const bannerTex = new THREE.TextureLoader().load("gemini-banner.png");
+          bannerTex.encoding = THREE.sRGBEncoding;
+          const bannerMat = new THREE.MeshBasicMaterial({
+            map: bannerTex,
+            side: THREE.DoubleSide
+          });
+          const bannerMesh = sectionStrip(
+            t.rx - 0.2, t.rz - 0.2, t.y,
+            t.rxTop + 0.2, t.rzTop + 0.2, t.yTop,
+            sec214.a0, sec214.a1,
+            24,
+            bannerMat
+          );
+          scene.add(bannerMesh);
+        }
+      } catch (err) {
+        console.warn("Block 214 banner creation failed:", err);
+      }
 
       /* ---------- seated crowd builder (dynamic fill rate support) ---------- */
       let torsoGeo = null, headGeo = null, torsoMat = null, headMat = null;
@@ -3688,6 +3754,7 @@
 
         const occ = [];
         for (let i = 0; i < SEAT_COUNT; i++) {
+          if (meta.pos[i * 3 + 1] === -9999) continue; // Skip skipped banner seats!
           const seatHash = ((i * 37) % 100) / 100;
           if (seatHash < rate) {
             occ.push(i);
