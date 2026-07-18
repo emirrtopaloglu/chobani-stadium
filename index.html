@@ -1375,8 +1375,8 @@
           type="button"
           aria-haspopup="dialog"
           aria-controls="support-modal"
-          aria-label="Learn how to support Chobani Arena"
-          title="Support more projects like Chobani Arena. No pressure"
+          aria-label="Proje hakkında detaylı bilgi al"
+          title="Proje ve stadyum hakkında detaylı bilgi"
         >
           <svg
             viewBox="0 0 24 24"
@@ -1385,10 +1385,10 @@
             stroke-width="2"
             aria-hidden="true"
           >
-            <path d="M4 8h13v6.5A4.5 4.5 0 0 1 12.5 19h-4A4.5 4.5 0 0 1 4 14.5V8Z" />
-            <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2M11 3v2M15 3v2" />
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
           </svg>
-          <span>Support this project</span>
+          <span>Proje Bilgisi</span>
         </button>
       </div>
     </nav>
@@ -1409,56 +1409,27 @@
         >
           ×
         </button>
-        <div class="support-kicker">☕ What I want to build next</div>
-        <h2 id="support-title">This stadium is only the beginning.</h2>
+        <div class="support-kicker">ℹ️ Proje Hakkında</div>
+        <h2 id="support-title">Fenerbahçe Chobani Stadium</h2>
         <p id="support-description">
-          I want to take Chobani Arena much further. I want real time seat previews while
-          you’re buying, photoreal venue captures with Gaussian splatting,
-          sunrise to sunset lighting, and richer atmosphere and match day
-          detail.
+          Bu interaktif 3D stadyum koltuk görüş önizleme deneyimi, orijinal geliştiricisi <strong>thebuggeddev</strong> (StadiView projesi) tarafından Three.js ve GSAP kullanılarak tamamen kodla oluşturulmuştur. Orijinal çalışmanın teknik mimarisine olan derin saygımızla birlikte, bu sürüm Türkçe diline çevrilmiş, Fenerbahçe'nin efsanevi 6-0 derbi zaferiyle ve Chobani Arena detaylarıyla özelleştirilmiştir.
         </p>
-        <div class="support-ideas" aria-label="Ideas for future versions">
-          <span>Real time ticket previews</span>
-          <span>Gaussian splatting</span>
-          <span>Sunrise → sunset</span>
-          <span>Movies &amp; cinemas</span>
-          <span>Concerts &amp; live events</span>
+        <div class="support-ideas" aria-label="Proje Detayları">
+          <span>Türkçe Arayüz Çevirisi</span>
+          <span>Fenerbahçe Sarı-Lacivert Tema</span>
+          <span>Galatasaray Derbisi (6-0 Bitiş)</span>
+          <span>Chobani Arena Özelleştirmeleri</span>
+          <span>Kod Mimarisi: thebuggeddev</span>
         </div>
         <p>
-          I’d also love to bring this same kind of experience to movie seats,
-          concerts, and all sorts of live events. The goal is to help people
-          feel a place before they book it.
-        </p>
-        <p>
-          I’m <strong>thebuggeddev</strong>. If this project made you smile and
-          you want to help me keep Claude Max Max Max alive so I can build all
-          of that, you can support the next experiment below 🥲😂
+          Orijinal projenin tüm hakları, 3D stadyum çizim kodları ve fikir mimarisi <strong>thebuggeddev</strong>'e aittir. Geliştiricinin diğer harika çalışmalarını incelemek isterseniz, kendisini GitHub ve X (Twitter) üzerinden takip edebilirsiniz.
         </p>
         <p class="support-note">
-          Absolutely no pressure. I genuinely enjoy making these things, and
-          I’ll keep building with whatever tokens I get each day.
+          Bu stadyumda maç bitiminde (90. dakikada) skor efsanevi 6-0 derbi sonucuna ulaşır ve tribünlerde tezahürat sesleri yükselir! Keyifli seyirler.
         </p>
         <div class="support-actions">
-          <a
-            class="support-paypal"
-            href="https://paypal.me/gunalesujata"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
-              <path d="M4 8h13v6.5A4.5 4.5 0 0 1 12.5 19h-4A4.5 4.5 0 0 1 4 14.5V8Z" />
-              <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2M11 3v2M15 3v2" />
-            </svg>
-            Fuel the next build
-          </a>
-          <button class="support-later" id="support-later" type="button">
-            Maybe later
+          <button class="support-later" id="support-later" type="button" style="width: 100%; justify-content: center; height: 46px;">
+            Kapat
           </button>
         </div>
       </section>
