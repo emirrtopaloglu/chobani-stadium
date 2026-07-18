@@ -14,7 +14,7 @@
       content="3D Fenerbahçe Chobani Stadium stadyum koltuk görüş önizleme deneyimi. Süper Lig derbi maçı için koltuk görüşünüzü inceleyin."
     />
     <meta name="author" content="thebuggeddev & Antigravity" />
-    <meta name="theme-color" content="#00205b" />
+    <meta name="theme-color" content="#043673" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Fenerbahçe Chobani Stadium" />
     <meta
@@ -24,8 +24,8 @@
     <meta name="twitter:card" content="summary" />
     <style>
       :root {
-        --fb-yellow: #fed500;
-        --fb-navy: #00205b;
+        --fb-yellow: #ffed00;
+        --fb-navy: #043673;
         --chobani-green: #004733;
         --chobani-cream: #faf6ed;
 
@@ -499,11 +499,11 @@
       .flag.fb {
         background: linear-gradient(
           180deg,
-          #00205b 20%,
-          #fed500 20% 40%,
-          #00205b 40% 60%,
-          #fed500 60% 80%,
-          #00205b 80%
+          #043673 20%,
+          #ffed00 20% 40%,
+          #043673 40% 60%,
+          #ffed00 60% 80%,
+          #043673 80%
         );
       }
       .flag.gs {
@@ -2417,7 +2417,7 @@
             let cx = 30;
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
-              x.fillStyle = i % 2 ? "#fed500" : "#ffffff";
+              x.fillStyle = i % 2 ? "#ffed00" : "#ffffff";
               x.fillText(t, cx, h / 2 + 2);
               cx += x.measureText(t).width + 120;
             }
@@ -2460,11 +2460,11 @@
         const kits = [
           {
             shirt: new THREE.MeshLambertMaterial({
-              color: 0xfed500, // Fenerbahce Yellow
-              emissive: 0xfed500,
+              color: 0xffed00, // Fenerbahce Yellow
+              emissive: 0xffed00,
               emissiveIntensity: 0.1,
             }),
-            shorts: new THREE.MeshLambertMaterial({ color: 0x00205b }), // Fenerbahce Navy Blue
+            shorts: new THREE.MeshLambertMaterial({ color: 0x043673 }), // Fenerbahce Navy Blue
             gk: new THREE.MeshLambertMaterial({
               color: 0x00ffcc,
               emissive: 0x00ffcc,
@@ -2949,7 +2949,7 @@
             ];
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
-              x.fillStyle = i % 2 ? "#fed500" : "#ffffff";
+              x.fillStyle = i % 2 ? "#ffed00" : "#ffffff";
               x.fillText(t, cx, h / 2 + 1);
               cx += x.measureText(t).width + 130;
             }
@@ -3135,7 +3135,7 @@
           const ataturkTex = canvasTexture(1024, 256, (x, w, h) => {
             x.fillStyle = "#e5e8ec"; // Match new light-grey roof color
             x.fillRect(0, 0, w, h);
-            x.fillStyle = "#00205b"; // Fenerbahçe Navy Blue text
+            x.fillStyle = "#043673"; // Fenerbahçe Navy Blue text
             x.textAlign = "center";
             x.textBaseline = "middle";
             x.font = "800 62px " + getComputedStyle(document.body).fontFamily;
@@ -3144,7 +3144,7 @@
           const fbTex = canvasTexture(1024, 256, (x, w, h) => {
             x.fillStyle = "#e5e8ec"; // Match new light-grey roof color
             x.fillRect(0, 0, w, h);
-            x.fillStyle = "#00205b"; // Fenerbahçe Navy Blue text
+            x.fillStyle = "#043673"; // Fenerbahçe Navy Blue text
             x.textAlign = "center";
             x.textBaseline = "middle";
             x.font = "800 76px " + getComputedStyle(document.body).fontFamily;
@@ -3173,6 +3173,59 @@
           scene.add(fbRoofMesh);
         } catch (e) {
           console.warn("Roof lettering meshes creation failed", e);
+        }
+
+        // Add 3D Corner Screen presenting the Gemini-generated image (Şükrü Saracoğlu Style)
+        try {
+          const bannerTex = new THREE.TextureLoader().load("gemini-banner.png");
+          bannerTex.encoding = THREE.sRGBEncoding;
+          
+          const screenGroup = new THREE.Group();
+          
+          // 1. Steel Frame Backing
+          const frameGeo = new THREE.BoxGeometry(20, 12, 0.8);
+          const frameMat = new THREE.MeshLambertMaterial({ color: 0x1a2236 }); // Dark metallic steel
+          const frame = new THREE.Mesh(frameGeo, frameMat);
+          screenGroup.add(frame);
+          
+          // 2. LED screen panel
+          const ledGeo = new THREE.PlaneGeometry(19.2, 11.2);
+          const ledMat = new THREE.MeshBasicMaterial({
+            map: bannerTex,
+            side: THREE.DoubleSide,
+            toneMapped: false
+          });
+          const led = new THREE.Mesh(ledGeo, ledMat);
+          led.position.z = 0.41; // position on frame face
+          screenGroup.add(led);
+          
+          // 3. Thick border frame details (top, bottom, sides)
+          const borderTop = new THREE.Mesh(new THREE.BoxGeometry(20.4, 0.6, 1), frameMat);
+          borderTop.position.set(0, 6, 0);
+          screenGroup.add(borderTop);
+          
+          const borderBottom = new THREE.Mesh(new THREE.BoxGeometry(20.4, 0.6, 1), frameMat);
+          borderBottom.position.set(0, -6, 0);
+          screenGroup.add(borderBottom);
+          
+          // 4. Support lattice pillars behind the screen
+          const pillarGeo = new THREE.BoxGeometry(1.2, 18, 1.2);
+          const pillar1 = new THREE.Mesh(pillarGeo, frameMat);
+          pillar1.position.set(-6, -8, -1);
+          screenGroup.add(pillar1);
+          
+          const pillar2 = new THREE.Mesh(pillarGeo, frameMat);
+          pillar2.position.set(6, -8, -1);
+          screenGroup.add(pillar2);
+
+          // Position the screen group in the North-West corner
+          // At height y = 18, angled at 45 degrees towards the center of the field
+          screenGroup.position.set(-82, 18, 64);
+          screenGroup.rotation.y = Math.PI / 4; // rotated towards the pitch
+          
+          scene.add(screenGroup);
+        } catch (err) {
+          console.warn("Corner screen mesh creation failed", err);
         }
       }
 
@@ -3253,7 +3306,7 @@
             w / 2,
             215,
           );
-          x.fillStyle = "#fed500";
+          x.fillStyle = "#ffed00";
           x.font = "700 60px " + f;
           x.fillText(
             score.minute < 90
@@ -3361,10 +3414,9 @@
       }
 
       function sectionBaseColor(tier, k) {
-        // Alt kat ve Üst kat renkleri terslenir (Chessboard Sarı-Lacivert deseni)
+        // Alt kat tamamen sarı, Üst kat tamamen lacivert olur
         const isLower = (tier.first === 101);
-        const colorIndex = isLower ? (k % 2 === 0 ? 0 : 1) : (k % 2 === 0 ? 1 : 0);
-        return colorIndex === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
+        return isLower ? new THREE.Color(0xffed00) : new THREE.Color(0x043673);
       }
 
       /* arc-length table for an ellipse */
@@ -3530,7 +3582,7 @@
                   }
                 }
                 if (isLetter) {
-                  jitter.set(0xffffff);
+                  jitter.set(0xffed00);
                 } else {
                   jitter
                     .copy(base)
@@ -3650,15 +3702,15 @@
         const dm = new THREE.Object3D(),
           cc = new THREE.Color();
         const cloth = [
-          "#00205b", // Fenerbahce Navy
-          "#fed500", // Fenerbahce Yellow
+          "#043673", // Fenerbahce Navy
+          "#ffed00", // Fenerbahce Yellow
           "#ffffff", // White
-          "#00205b",
-          "#fed500",
+          "#043673",
+          "#ffed00",
           "#ffffff",
           "#ffffff",
-          "#00205b",
-          "#fed500",
+          "#043673",
+          "#ffed00",
         ];
         const skinTones = [
           "#8d5a3b",
@@ -3719,7 +3771,7 @@
           }
 
           if (isLetter) {
-            cc.set(0xffffff); // Harfler üzerindeki seyirciler beyaz giyer
+            cc.set(0xffed00); // Harfler üzerindeki seyirciler sarı giyer
           } else if (rng() < 0.35) {
             cc.copy(sectionBaseColor(tr, secK)).offsetHSL(
               0,
