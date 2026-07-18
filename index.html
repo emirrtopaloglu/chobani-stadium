@@ -1982,10 +1982,10 @@
       const cdTex = mkConcreteTex("#121826", "#232e46");
       const roofTex = (() => {
         const t = canvasTexture(256, 64, (x, w, h) => {
-          x.fillStyle = "#0d1322";
+          x.fillStyle = "#e5e8ec"; // Premium light-grey roof background
           x.fillRect(0, 0, w, h);
           x.globalAlpha = 0.55;
-          x.strokeStyle = "#070b14";
+          x.strokeStyle = "#bfc5cf"; // Subtle panel joint lines
           x.lineWidth = 2;
           for (let i = 0; i < 8; i++) {
             x.beginPath();
@@ -1995,7 +1995,7 @@
           }
           x.globalAlpha = 0.12;
           for (let i = 0; i < 450; i++) {
-            x.fillStyle = Math.random() > 0.5 ? "#000" : "#26324e";
+            x.fillStyle = Math.random() > 0.5 ? "#999" : "#fff";
             x.fillRect(Math.random() * w, Math.random() * h, 2, 2);
           }
           x.globalAlpha = 1;
@@ -2627,28 +2627,16 @@
           palette: "rainbow",
         },
         {
-          name: "Chobani VIP Tribün",
+          name: "Maraton Üst Tribün",
           first: 201,
-          sections: 24,
-          rows: 12,
+          sections: 32,
+          rows: 22,
           rx: 82,
           rz: 65,
-          y: 15.2,
-          dr: 0.8,
-          dy: 0.6,
-          palette: "steel",
-        },
-        {
-          name: "Maraton Üst Tribün",
-          first: 301,
-          sections: 32,
-          rows: 16,
-          rx: 94,
-          rz: 77,
-          y: 27.6,
-          dr: 0.8,
-          dy: 0.7,
-          palette: "night",
+          y: 13.5,
+          dr: 0.85,
+          dy: 0.68,
+          palette: "rainbow",
         },
       ];
       TIERS.forEach((t) => {
@@ -2803,7 +2791,7 @@
             ),
           );
           // back wall (short parapet mid-bowl, tall at the very top)
-          const wallH = i === 2 ? 2.6 : 1.2;
+          const wallH = i === TIERS.length - 1 ? 2.6 : 1.2;
           scene.add(
             ringStrip(
               t.rxTop + 1,
@@ -2818,7 +2806,7 @@
             ),
           );
           // concourse glass from wall top up to the next tier's fascia, plus a soffit closing the slot
-          if (i < 2) {
+          if (i < TIERS.length - 1) {
             const nt = TIERS[i + 1];
             scene.add(
               ringStrip(
@@ -3057,33 +3045,33 @@
         // Add MUSTAFA KEMAL ATATÜRK and FENERBAHÇE roof banner plane graphics (Şükrü Saracoğlu Style)
         try {
           const ataturkTex = canvasTexture(1024, 256, (x, w, h) => {
-            x.fillStyle = "#0c1322"; // Match roof dark navy color
+            x.fillStyle = "#e5e8ec"; // Match new light-grey roof color
             x.fillRect(0, 0, w, h);
-            x.fillStyle = "#ffffff";
+            x.fillStyle = "#00205b"; // Fenerbahçe Navy Blue text
             x.textAlign = "center";
             x.textBaseline = "middle";
             x.font = "800 62px " + getComputedStyle(document.body).fontFamily;
             x.fillText("MUSTAFA KEMAL ATATÜRK", w / 2, h / 2);
           });
           const fbTex = canvasTexture(1024, 256, (x, w, h) => {
-            x.fillStyle = "#0c1322"; // Match roof dark navy color
+            x.fillStyle = "#e5e8ec"; // Match new light-grey roof color
             x.fillRect(0, 0, w, h);
-            x.fillStyle = "#ffffff";
+            x.fillStyle = "#00205b"; // Fenerbahçe Navy Blue text
             x.textAlign = "center";
             x.textBaseline = "middle";
             x.font = "800 76px " + getComputedStyle(document.body).fontFamily;
             x.fillText("FENERBAHÇE", w / 2, h / 2);
           });
 
-          const ataturkGeo = new THREE.PlaneGeometry(100, 22);
+          const ataturkGeo = new THREE.PlaneGeometry(120, 22);
           const ataturkMat = new THREE.MeshBasicMaterial({
             map: ataturkTex,
             side: THREE.DoubleSide,
           });
           const ataturkMesh = new THREE.Mesh(ataturkGeo, ataturkMat);
           ataturkMesh.rotation.x = -Math.PI / 2;
-          ataturkMesh.rotation.z = Math.PI / 2;
-          ataturkMesh.position.set(106, 48.05, 0); // Positioned on top of Maraton stand roof
+          ataturkMesh.rotation.z = Math.PI; // Aligned along the long Maraton side roof
+          ataturkMesh.position.set(0, 48.05, 87.5);
           scene.add(ataturkMesh);
 
           const fbRoofMat = new THREE.MeshBasicMaterial({
@@ -3092,8 +3080,8 @@
           });
           const fbRoofMesh = new THREE.Mesh(ataturkGeo, fbRoofMat);
           fbRoofMesh.rotation.x = -Math.PI / 2;
-          fbRoofMesh.rotation.z = -Math.PI / 2;
-          fbRoofMesh.position.set(-106, 48.05, 0); // Positioned on top of Fenerium stand roof
+          fbRoofMesh.rotation.z = 0; // Aligned along the long Fenerium side roof
+          fbRoofMesh.position.set(0, 48.05, -87.5);
           scene.add(fbRoofMesh);
         } catch (e) {
           console.warn("Roof lettering meshes creation failed", e);
@@ -4427,8 +4415,8 @@
 
       /* ---------- minimaps ---------- */
       const ovBase = document.createElement("canvas");
-      const RXmax = TIERS[2].rxTop + 3,
-        RZmax = TIERS[2].rzTop + 3;
+      const RXmax = TIERS[TIERS.length - 1].rxTop + 3,
+        RZmax = TIERS[TIERS.length - 1].rzTop + 3;
       function drawOverviewBase() {
         const cv = ui.ov.canvas;
         ovBase.width = cv.width;
