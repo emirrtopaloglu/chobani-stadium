@@ -2311,15 +2311,15 @@
             x.font = "700 40px " + getComputedStyle(document.body).fontFamily;
             x.textBaseline = "middle";
             const words = [
-              "CHOBANI ARENA",
-              "YASA SEVGİNİ EN YAKINDAN",
-              "DERBİ GÜNÜ CANLI",
-              "FENERBAHÇE × GALATASARAY",
+              "FENERBAHÇE",
+              "MAZİNDE BİR TARİH YATAR",
+              "YAŞA FENERBAHÇE",
+              "SARI LACİVERT EN BÜYÜK FENER",
             ];
             let cx = 30;
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
-              x.fillStyle = i % 2 ? "#fed500" : "#faf6ed";
+              x.fillStyle = i % 2 ? "#fed500" : "#ffffff";
               x.fillText(t, cx, h / 2 + 2);
               cx += x.measureText(t).width + 120;
             }
@@ -2856,10 +2856,10 @@
             x.textBaseline = "middle";
             let cx = 40;
             const words = [
-              "FENERBAHÇE VS GALATASARAY",
-              "TRENDYOL SÜPER LİG",
-              "CHOBANI ARENA · ISTANBUL",
-              "KICK OFF 20.00",
+              "MAZİNDE BİR TARİH YATAR",
+              "YAŞA FENERBAHÇE",
+              "GÜCÜNE GÜÇ KATMAYA GELDİK",
+              "SARI LACİVERT EN BÜYÜK FENER",
             ];
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
@@ -3202,13 +3202,8 @@
         "#eab308",
       ];
       function sectionBaseColor(tier, k) {
-        if (tier.palette === "rainbow") {
-          return k % 2 === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
-        }
-        if (tier.palette === "steel") {
-          return k % 2 === 0 ? new THREE.Color(0x004733) : new THREE.Color(0xfbf8f3);
-        }
-        return k % 2 === 0 ? new THREE.Color(0x00205b) : new THREE.Color(0xfed500);
+        // Tüm stadyum tribün koltukları dikey Sarı-Lacivert bloklar halinde boyanır
+        return k % 2 === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
       }
 
       /* arc-length table for an ellipse */
@@ -3458,8 +3453,8 @@
           "#ffffff", // White
           "#00205b",
           "#fed500",
-          "#004733", // Chobani Green
-          "#faf6ed", // Chobani Cream
+          "#ffffff", // White
+          "#ffffff", // White
           "#00205b",
           "#fed500",
         ];
