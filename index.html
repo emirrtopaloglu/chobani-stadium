@@ -1,9 +1,27 @@
+<!--
+  StadiView is a procedural 3D stadium seat preview experience.
+  Copyright 2026 thebuggeddev
+  Community license is PolyForm Noncommercial 1.0.0. See LICENSE.md.
+-->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StadiView — Experience every seat</title>
+    <title>StadiView. Experience every seat</title>
+    <meta
+      name="description"
+      content="Explore a fully procedural 3D football stadium and preview the match from thousands of individual seats."
+    />
+    <meta name="author" content="thebuggeddev" />
+    <meta name="theme-color" content="#05070d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="StadiView. Experience every seat" />
+    <meta
+      property="og:description"
+      content="A procedural 3D football stadium seat preview concept by thebuggeddev."
+    />
+    <meta name="twitter:card" content="summary" />
     <style>
       :root {
         --paper: #f4eee0;
@@ -211,6 +229,201 @@
         font-weight: 900;
         color: #fff;
         box-shadow: var(--shadow-sm);
+      }
+      .support-btn {
+        height: 42px;
+        margin-left: 2px;
+        padding: 0 14px 0 11px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--ink);
+        background: var(--yellow);
+        border: 3px solid var(--ink);
+        box-shadow: var(--shadow-sm);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.035em;
+        white-space: nowrap;
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s;
+      }
+      .support-btn:hover {
+        transform: translate(-1.5px, -1.5px);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .support-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 0.5px 0.5px 0 var(--ink);
+      }
+      .support-btn svg {
+        width: 18px;
+        height: 18px;
+        flex: none;
+      }
+
+      /* ---------- support modal ---------- */
+      #support-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        display: grid;
+        place-items: center;
+        padding: 22px;
+        background: rgba(2, 4, 9, 0.72);
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity 0.22s ease,
+          visibility 0.22s ease;
+      }
+      #support-modal.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .support-dialog {
+        position: relative;
+        width: min(590px, 100%);
+        max-height: min(760px, calc(100svh - 44px));
+        overflow-y: auto;
+        padding: 31px;
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        border-radius: 16px;
+        box-shadow: 9px 9px 0 var(--ink);
+        transform: translateY(16px) rotate(-0.4deg) scale(0.98);
+        transition: transform 0.24s cubic-bezier(0.2, 0.9, 0.25, 1);
+      }
+      #support-modal.show .support-dialog {
+        transform: translateY(0) rotate(-0.4deg) scale(1);
+      }
+      .support-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border: 2.5px solid var(--ink);
+        border-radius: 9px;
+        background: var(--paper-2);
+        box-shadow: var(--shadow-sm);
+        font-size: 23px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .support-close:hover {
+        background: var(--pink);
+      }
+      .support-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0 48px 14px 0;
+        padding: 6px 9px;
+        color: var(--ink);
+        background: var(--yellow);
+        border: 2px solid var(--ink);
+        border-radius: 7px;
+        box-shadow: var(--shadow-sm);
+        font-size: 10.5px;
+        font-weight: 900;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+      .support-dialog h2 {
+        max-width: 480px;
+        margin: 0 0 15px;
+        color: var(--ink);
+        font-size: clamp(27px, 5vw, 39px);
+        line-height: 0.98;
+        letter-spacing: -0.045em;
+      }
+      .support-dialog p {
+        color: var(--dim);
+        font-size: 14.5px;
+        font-weight: 650;
+        line-height: 1.55;
+      }
+      .support-dialog p + p {
+        margin-top: 12px;
+      }
+      .support-ideas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin: 19px 0;
+      }
+      .support-ideas span {
+        padding: 7px 9px;
+        color: var(--ink);
+        background: var(--paper-2);
+        border: 2px solid var(--ink);
+        border-radius: 7px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        font-weight: 800;
+        box-shadow: 2px 2px 0 var(--ink);
+      }
+      .support-note {
+        padding: 12px 13px;
+        color: var(--ink) !important;
+        background: #fff8dc;
+        border-left: 4px solid var(--yellow);
+        border-radius: 0 8px 8px 0;
+      }
+      .support-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .support-paypal,
+      .support-later {
+        min-height: 46px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid var(--ink);
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.035em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      .support-paypal {
+        flex: 1;
+        gap: 8px;
+        padding: 0 17px;
+        color: var(--ink);
+        background: var(--yellow);
+        box-shadow: var(--shadow-md);
+      }
+      .support-paypal:hover {
+        transform: translate(-1.5px, -1.5px);
+        box-shadow: 6px 6px 0 var(--ink);
+      }
+      .support-paypal svg {
+        width: 17px;
+        height: 17px;
+      }
+      .support-later {
+        padding: 0 15px;
+        color: var(--ink);
+        background: var(--paper-2);
+      }
+      .support-later:hover {
+        background: #e6dfcd;
       }
 
       /* ---------- card base ---------- */
@@ -1026,6 +1239,54 @@
           display: none;
         }
       }
+      @media (max-width: 650px) {
+        nav {
+          height: 76px;
+          padding: 0 14px;
+        }
+        .brand {
+          padding-right: 12px;
+          font-size: 16px;
+        }
+        .nav-actions .icon-btn {
+          display: none;
+        }
+        .support-btn {
+          width: 42px;
+          padding: 0;
+          justify-content: center;
+        }
+        .support-btn span {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+        #support-modal {
+          padding: 14px;
+        }
+        .support-dialog {
+          max-height: calc(100svh - 28px);
+          padding: 25px 20px 21px;
+          box-shadow: 6px 6px 0 var(--ink);
+        }
+        .support-dialog h2 {
+          padding-right: 20px;
+        }
+        .support-actions {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .support-paypal,
+        .support-later {
+          width: 100%;
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         * {
           transition-duration: 0.01ms !important;
@@ -1113,9 +1374,100 @@
             <circle cx="18" cy="21" r="1.4" fill="currentColor" /></svg
           ><span class="badge">2</span>
         </button>
-        <div class="avatar" role="img" aria-label="Account: JD">JD</div>
+        <button
+          class="support-btn"
+          id="support-trigger"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="support-modal"
+          aria-label="Learn how to support StadiView"
+          title="Support more projects like StadiView. No pressure"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M4 8h13v6.5A4.5 4.5 0 0 1 12.5 19h-4A4.5 4.5 0 0 1 4 14.5V8Z" />
+            <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2M11 3v2M15 3v2" />
+          </svg>
+          <span>Support this project</span>
+        </button>
       </div>
     </nav>
+
+    <div id="support-modal" aria-hidden="true">
+      <section
+        class="support-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="support-title"
+        aria-describedby="support-description"
+      >
+        <button
+          class="support-close"
+          id="support-close"
+          type="button"
+          aria-label="Close support message"
+        >
+          ×
+        </button>
+        <div class="support-kicker">☕ What I want to build next</div>
+        <h2 id="support-title">This stadium is only the beginning.</h2>
+        <p id="support-description">
+          I want to take StadiView much further. I want real time seat previews while
+          you’re buying, photoreal venue captures with Gaussian splatting,
+          sunrise to sunset lighting, and richer atmosphere and match day
+          detail.
+        </p>
+        <div class="support-ideas" aria-label="Ideas for future versions">
+          <span>Real time ticket previews</span>
+          <span>Gaussian splatting</span>
+          <span>Sunrise → sunset</span>
+          <span>Movies &amp; cinemas</span>
+          <span>Concerts &amp; live events</span>
+        </div>
+        <p>
+          I’d also love to bring this same kind of experience to movie seats,
+          concerts, and all sorts of live events. The goal is to help people
+          feel a place before they book it.
+        </p>
+        <p>
+          I’m <strong>thebuggeddev</strong>. If this project made you smile and
+          you want to help me keep Claude Max Max Max alive so I can build all
+          of that, you can support the next experiment below 🥲😂
+        </p>
+        <p class="support-note">
+          Absolutely no pressure. I genuinely enjoy making these things, and
+          I’ll keep building with whatever tokens I get each day.
+        </p>
+        <div class="support-actions">
+          <a
+            class="support-paypal"
+            href="https://paypal.me/gunalesujata"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path d="M4 8h13v6.5A4.5 4.5 0 0 1 12.5 19h-4A4.5 4.5 0 0 1 4 14.5V8Z" />
+              <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M7 3v2M11 3v2M15 3v2" />
+            </svg>
+            Fuel the next build
+          </a>
+          <button class="support-later" id="support-later" type="button">
+            Maybe later
+          </button>
+        </div>
+      </section>
+    </div>
 
     <section id="match" class="card" aria-label="Upcoming match">
       <div class="eyebrow">INTERNATIONAL FRIENDLY</div>
@@ -1140,7 +1492,7 @@
           >
             <rect x="3" y="5" width="18" height="16" rx="2" />
             <path d="M8 3v4M16 3v4M3 10h18" /></svg
-          >Sat, 20 July 2025 <span class="dot">·</span> 8:30 PM
+          >Demo fixture <span class="dot">·</span> 8:30 PM
         </div>
         <div class="row">
           <svg
@@ -1259,7 +1611,7 @@
         <div class="preview">
           <img id="p-img" alt="View from the selected seat" />
           <div class="ph" id="p-ph">Rendering seat view…</div>
-          <div class="pill tl" id="p-score">★ — view</div>
+          <div class="pill tl" id="p-score">★ view</div>
           <div class="pill br">360°</div>
         </div>
         <div class="benefits" id="benefits">
@@ -1356,7 +1708,7 @@
           >
             <rect x="4" y="10" width="16" height="10" rx="2" />
             <path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg
-          >Secure checkout
+          >Concept demo · no real ticket sales
         </div>
       </section>
     </div>
@@ -1423,7 +1775,7 @@
 
     <div id="tip" aria-hidden="true">
       <div class="t1" id="tip1">Section · Row · Seat</div>
-      <div class="t2" id="tip2">€—</div>
+      <div class="t2" id="tip2">€ pending</div>
     </div>
     <div id="toast" role="status"></div>
 
@@ -1431,8 +1783,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
       /* ============================================================
-   StadiView — procedural 3D stadium seat-preview experience
+   StadiView procedural 3D stadium seat preview experience
    Single file. Three.js r128 + GSAP. No imported models.
+   Copyright © 2026 thebuggeddev. Licensed under PolyForm Noncommercial 1.0.0.
+   Commercial use requires a separate license. See LICENSE.md.
    ============================================================ */
       "use strict";
 
@@ -1440,6 +1794,52 @@
         "(prefers-reduced-motion: reduce)",
       ).matches;
       const TAU = Math.PI * 2;
+
+      /* ---------- support modal ---------- */
+      const supportModal = document.getElementById("support-modal");
+      const supportTrigger = document.getElementById("support-trigger");
+      const supportClose = document.getElementById("support-close");
+      const supportLater = document.getElementById("support-later");
+      let supportReturnFocus = null;
+
+      function openSupportModal() {
+        supportReturnFocus = document.activeElement;
+        supportModal.classList.add("show");
+        supportModal.setAttribute("aria-hidden", "false");
+        supportClose.focus();
+      }
+
+      function closeSupportModal() {
+        supportModal.classList.remove("show");
+        supportModal.setAttribute("aria-hidden", "true");
+        if (supportReturnFocus) supportReturnFocus.focus();
+      }
+
+      supportTrigger.addEventListener("click", openSupportModal);
+      supportClose.addEventListener("click", closeSupportModal);
+      supportLater.addEventListener("click", closeSupportModal);
+      supportModal.addEventListener("click", (event) => {
+        if (event.target === supportModal) closeSupportModal();
+      });
+      supportModal.addEventListener("keydown", (event) => {
+        event.stopPropagation();
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeSupportModal();
+          return;
+        }
+        if (event.key !== "Tab") return;
+        const focusable = [...supportModal.querySelectorAll("a, button")];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
 
       /* ---------- deterministic rng ---------- */
       function mulberry32(a) {
@@ -2221,7 +2621,7 @@
             ball.position.set(0, 0.16, 0);
             match.holder = (scoringTeam ? 0 : 11) + 5;
           } else {
-            // wide — goal kick
+            // wide goal kick
             match.holder = scoringTeam ? 0 : 11;
             ball.position.copy(players[match.holder].g.position);
             ball.position.y = 0.16;
@@ -2291,7 +2691,7 @@
       };
 
       /* ---------- bowl concrete, walls, walkways, rails ---------- */
-      /* Every junction shares edges — no interpenetrating bands (the old build
+      /* Every junction shares edges with no interpenetrating bands (the old build
    sliced the tier-1 walkway through the tier-0 back wall, which flickered). */
       {
         const SEG = 160;
@@ -2411,7 +2811,7 @@
               80,
             ),
           );
-          // walkway — inner radius meets the previous tier's back wall exactly
+          // walkway inner radius meets the previous tier's back wall exactly
           const wInX = i === 0 ? t.rx - 3.4 : TIERS[i - 1].rxTop + 1;
           const wInZ = i === 0 ? t.rz - 3.4 : TIERS[i - 1].rzTop + 1;
           scene.add(
@@ -2494,7 +2894,7 @@
               "ARGENTINA VS SPAIN",
               "INTERNATIONAL FRIENDLY",
               "METROPOLITANO · MADRID",
-              "KICK-OFF 8:30 PM",
+              "KICK OFF 8.30 PM",
             ];
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
@@ -2752,7 +3152,7 @@
           x.fillStyle = "#dff0ff";
           x.font = "800 130px " + f;
           x.fillText(
-            "ARG  " + score.home + " : " + score.away + "  ESP",
+            "ARG  " + score.home + " · " + score.away + "  ESP",
             w / 2,
             215,
           );
@@ -2796,7 +3196,7 @@
       }
 
       /* ============================================================
-   SEATS — every seat generated mathematically, one InstancedMesh
+   SEATS every seat generated mathematically with one InstancedMesh
    ============================================================ */
       const SEAT_SPACING = 0.58,
         AISLE = 1.5;
@@ -2898,7 +3298,7 @@
         specular: 0x2c333f,
       }); // plastic sheen
 
-      /* first pass — count seats and record layout */
+      /* first pass counts seats and records layout */
       const layout = []; // per tier: rows -> table + per-section seat counts
       let SEAT_COUNT = 0;
       TIERS.forEach((tier, ti) => {
@@ -3046,7 +3446,7 @@
       }
       scene.add(seatMesh);
 
-      /* ---------- seated crowd — a person on every sold seat ---------- */
+      /* ---------- seated crowd with a person on every sold seat ---------- */
       {
         const occ = [];
         for (let i = 0; i < SEAT_COUNT; i++) if (!meta.avail[i]) occ.push(i);
@@ -3222,7 +3622,7 @@
         };
       }
 
-      /* featured seat — Section 125 · Row 12 · Seat 18 */
+      /* featured seat Section 125 · Row 12 · Seat 18 */
       let featuredIdx = -1;
       {
         const sec = sections.find((s) => s.label === 125);
@@ -3830,10 +4230,10 @@
               }
               if (found >= 0) {
                 toast(
-                  "That seat is taken — showing the nearest free one in the row",
+                  "That seat is taken. Showing the nearest free one in the row",
                 );
                 flyToSeat(found);
-              } else toast("That row is sold out — try another one");
+              } else toast("That row is sold out. Try another one");
             }
           }
         }
@@ -3913,7 +4313,7 @@
       });
       $("checkout").addEventListener("click", () => {
         if (confirmed) {
-          toast("Seat secured — checkout isn’t wired in this demo", 3000);
+          toast("Seat secured. Checkout isn’t wired in this demo", 3000);
           return;
         }
         if (mode === "seat") {
@@ -3921,7 +4321,7 @@
           return;
         }
         if (selectedIdx >= 0 && mode === "orbit") {
-          toast("Taking you there first — grab it once you like the view");
+          toast("Taking you there first. Grab it once you like the view");
           flyToSeat(selectedIdx);
         }
       });
@@ -3963,7 +4363,7 @@
         ),
       );
       $("d-vr").addEventListener("click", () =>
-        toast("VR mode needs a WebXR headset — not in this build"),
+        toast("VR mode needs a WebXR headset. It is not in this build"),
       );
       ui.d3d.addEventListener("click", () => {
         if (mode !== "orbit") return;
