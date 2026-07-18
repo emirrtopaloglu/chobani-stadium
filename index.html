@@ -1761,6 +1761,16 @@
       ).matches;
       const TAU = Math.PI * 2;
 
+      // Superellipse coordinate function for a rectangular stadium (Şükrü Saracoğlu style)
+      function stCoord(ang, rx, rz) {
+        const n = 4.2; // Exponent for rounded-corner rectangular layout
+        const cos = Math.cos(ang);
+        const sin = Math.sin(ang);
+        const x = rx * Math.sign(cos) * Math.pow(Math.abs(cos), 2 / n);
+        const z = rz * Math.sign(sin) * Math.pow(Math.abs(sin), 2 / n);
+        return { x, z };
+      }
+
       /* ---------- support modal ---------- */
       const supportModal = document.getElementById("support-modal");
       const supportTrigger = document.getElementById("support-trigger");
@@ -1893,10 +1903,10 @@
           idx = [];
         repU = repU || 10;
         for (let i = 0; i <= seg; i++) {
-          const a = (i / seg) * TAU,
-            c = Math.cos(a),
-            s = Math.sin(a);
-          pos.push(rx1 * c, y1, rz1 * s, rx2 * c, y2, rz2 * s);
+          const a = (i / seg) * TAU;
+          const pt1 = stCoord(a, rx1, rz1);
+          const pt2 = stCoord(a, rx2, rz2);
+          pos.push(pt1.x, y1, pt1.z, pt2.x, y2, pt2.z);
           uv.push((i / seg) * repU, 0, (i / seg) * repU, 1);
         }
         for (let i = 0; i < seg; i++) {
@@ -2937,18 +2947,18 @@
         );
         // radial trusses (top chords)
         for (let i = 0; i < 44; i++) {
-          const a = (i / 44) * TAU,
-            c = Math.cos(a),
-            s = Math.sin(a);
+          const a = (i / 44) * TAU;
+          const pt1 = stCoord(a, ROOF.inRx, ROOF.inRz);
+          const pt2 = stCoord(a, ROOF.outRx, ROOF.outRz);
           const p1 = new THREE.Vector3(
-            ROOF.inRx * c,
+            pt1.x,
             ROOF.inY - 0.7,
-            ROOF.inRz * s,
+            pt1.z,
           );
           const p2 = new THREE.Vector3(
-            ROOF.outRx * c,
+            pt2.x,
             ROOF.outY - 0.7,
-            ROOF.outRz * s,
+            pt2.z,
           );
           const len = p1.distanceTo(p2);
           const truss = new THREE.Mesh(
@@ -2960,19 +2970,17 @@
           scene.add(truss);
         }
         // facade wall + support columns
-        const wall = new THREE.Mesh(
-          new THREE.CylinderGeometry(
-            ROOF.outRx - 1,
-            ROOF.outRx - 1,
-            ROOF.outY - 2,
-            96,
-            1,
-            true,
-          ),
+        const wall = ringStrip(
+          ROOF.outRx - 1,
+          ROOF.outRz - 1,
+          0.1,
+          ROOF.outRx - 1,
+          ROOF.outRz - 1,
+          ROOF.outY - 1.9,
+          120,
           MAT.facade,
+          36,
         );
-        wall.scale.z = (ROOF.outRz - 1) / (ROOF.outRx - 1);
-        wall.position.y = (ROOF.outY - 2) / 2;
         scene.add(wall);
         for (let i = 0; i < 48; i++) {
           const a = (i / 48) * TAU;
@@ -2980,10 +2988,11 @@
             new THREE.CylinderGeometry(0.55, 0.7, ROOF.outY, 8),
             MAT.steelDark,
           );
+          const pt = stCoord(a, ROOF.outRx + 0.6, ROOF.outRz + 0.6);
           col.position.set(
-            (ROOF.outRx + 0.6) * Math.cos(a),
+            pt.x,
             ROOF.outY / 2,
-            (ROOF.outRz + 0.6) * Math.sin(a),
+            pt.z,
           );
           scene.add(col);
         }
@@ -3035,13 +3044,59 @@
         for (let i = 0; i < 56; i++) {
           const a = (i / 56) * TAU;
           const sp = new THREE.Sprite(smat);
+          const pt = stCoord(a, ROOF.inRx + 0.3, ROOF.inRz + 0.3);
           sp.position.set(
-            (ROOF.inRx + 0.3) * Math.cos(a),
+            pt.x,
             ROOF.inY - 0.75,
-            (ROOF.inRz + 0.3) * Math.sin(a),
+            pt.z,
           );
           sp.scale.setScalar(4.2 + (i % 3) * 0.8);
           scene.add(sp);
+        }
+
+        // Add MUSTAFA KEMAL ATATÜRK and FENERBAHÇE roof banner plane graphics (Şükrü Saracoğlu Style)
+        try {
+          const ataturkTex = canvasTexture(1024, 256, (x, w, h) => {
+            x.fillStyle = "#0c1322"; // Match roof dark navy color
+            x.fillRect(0, 0, w, h);
+            x.fillStyle = "#ffffff";
+            x.textAlign = "center";
+            x.textBaseline = "middle";
+            x.font = "800 62px " + getComputedStyle(document.body).fontFamily;
+            x.fillText("MUSTAFA KEMAL ATATÜRK", w / 2, h / 2);
+          });
+          const fbTex = canvasTexture(1024, 256, (x, w, h) => {
+            x.fillStyle = "#0c1322"; // Match roof dark navy color
+            x.fillRect(0, 0, w, h);
+            x.fillStyle = "#ffffff";
+            x.textAlign = "center";
+            x.textBaseline = "middle";
+            x.font = "800 76px " + getComputedStyle(document.body).fontFamily;
+            x.fillText("FENERBAHÇE", w / 2, h / 2);
+          });
+
+          const ataturkGeo = new THREE.PlaneGeometry(100, 22);
+          const ataturkMat = new THREE.MeshBasicMaterial({
+            map: ataturkTex,
+            side: THREE.DoubleSide,
+          });
+          const ataturkMesh = new THREE.Mesh(ataturkGeo, ataturkMat);
+          ataturkMesh.rotation.x = -Math.PI / 2;
+          ataturkMesh.rotation.z = Math.PI / 2;
+          ataturkMesh.position.set(106, 48.05, 0); // Positioned on top of Maraton stand roof
+          scene.add(ataturkMesh);
+
+          const fbRoofMat = new THREE.MeshBasicMaterial({
+            map: fbTex,
+            side: THREE.DoubleSide,
+          });
+          const fbRoofMesh = new THREE.Mesh(ataturkGeo, fbRoofMat);
+          fbRoofMesh.rotation.x = -Math.PI / 2;
+          fbRoofMesh.rotation.z = -Math.PI / 2;
+          fbRoofMesh.position.set(-106, 48.05, 0); // Positioned on top of Fenerium stand roof
+          scene.add(fbRoofMesh);
+        } catch (e) {
+          console.warn("Roof lettering meshes creation failed", e);
         }
       }
 
@@ -3068,10 +3123,11 @@
         const up = new THREE.Vector3(0, 1, 0);
         for (let i = 0; i < 10; i++) {
           const a = ((i + 0.5) / 10) * TAU;
+          const pt = stCoord(a, ROOF.inRx + 0.3, ROOF.inRz + 0.3);
           const from = new THREE.Vector3(
-            (ROOF.inRx + 0.3) * Math.cos(a),
+            pt.x,
             ROOF.inY - 0.9,
-            (ROOF.inRz + 0.3) * Math.sin(a),
+            pt.z,
           );
           const to = new THREE.Vector3(
             (rng() - 0.5) * 74,
@@ -3211,16 +3267,16 @@
         const N = 1200,
           s = new Float32Array(N + 1),
           a = new Float32Array(N + 1);
-        let L = 0,
-          px = rx,
-          pz = 0;
+        let L = 0;
+        const ptStart = stCoord(0, rx, rz);
+        let px = ptStart.x,
+          pz = ptStart.z;
         for (let i = 1; i <= N; i++) {
-          const ang = (i / N) * TAU,
-            x = rx * Math.cos(ang),
-            z = rz * Math.sin(ang);
-          L += Math.hypot(x - px, z - pz);
-          px = x;
-          pz = z;
+          const ang = (i / N) * TAU;
+          const pt = stCoord(ang, rx, rz);
+          L += Math.hypot(pt.x - px, pt.z - pz);
+          px = pt.x;
+          pz = pt.z;
           s[i] = L;
           a[i] = ang;
         }
@@ -3340,8 +3396,9 @@
                 rowCount = R.n;
               for (let q = 0; q < R.n; q++) {
                 const th = thetaAt(R.tb, s0 + (q + 0.5) * SEAT_SPACING);
-                const x = R.rx * Math.cos(th),
-                  z = R.rz * Math.sin(th);
+                const pt = stCoord(th, R.rx, R.rz);
+                const x = pt.x,
+                  z = pt.z;
                 const yaw = Math.atan2(-x, -z);
                 dummy.position.set(x, R.y, z);
                 dummy.rotation.set(0, yaw, 0);
