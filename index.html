@@ -8,31 +8,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StadiView. Experience every seat</title>
+    <title>Fenerbahçe Chobani Stadium | Koltuk Görüş Önizleme</title>
     <meta
       name="description"
-      content="Explore a fully procedural 3D football stadium and preview the match from thousands of individual seats."
+      content="3D Fenerbahçe Chobani Stadium stadyum koltuk görüş önizleme deneyimi. Süper Lig derbi maçı için koltuk görüşünüzü inceleyin."
     />
-    <meta name="author" content="thebuggeddev" />
-    <meta name="theme-color" content="#05070d" />
+    <meta name="author" content="thebuggeddev & Antigravity" />
+    <meta name="theme-color" content="#00205b" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="StadiView. Experience every seat" />
+    <meta property="og:title" content="Fenerbahçe Chobani Stadium" />
     <meta
       property="og:description"
-      content="A procedural 3D football stadium seat preview concept by thebuggeddev."
+      content="Fenerbahçe Chobani Stadium 3D koltuk görüş önizleme konsepti."
     />
     <meta name="twitter:card" content="summary" />
     <style>
       :root {
-        --paper: #f4eee0;
+        --fb-yellow: #fed500;
+        --fb-navy: #00205b;
+        --chobani-green: #004733;
+        --chobani-cream: #faf6ed;
+
+        --paper: var(--chobani-cream);
         --paper-2: #ffffff;
-        --ink: #141414;
-        --dim: #5c564c;
-        --yellow: #ffd23f;
-        --blue: #3d6dff;
-        --green: #2fd573;
-        --pink: #ff5d8f;
-        --cyanink: #39c4ff;
+        --ink: var(--fb-navy);
+        --dim: #4a5c78;
+        --yellow: var(--fb-yellow);
+        --blue: var(--fb-navy);
+        --green: var(--chobani-green);
+        --pink: #d6336c;
+        --cyanink: #00bfff;
         --shadow-lg: 7px 7px 0 var(--ink);
         --shadow-md: 4px 4px 0 var(--ink);
         --shadow-sm: 2.5px 2.5px 0 var(--ink);
@@ -491,32 +496,21 @@
         border: 2.5px solid var(--ink);
         box-shadow: var(--shadow-sm);
       }
-      .flag.arg {
+      .flag.fb {
         background: linear-gradient(
           180deg,
-          #74acdf 33.3%,
-          #fff 33.3% 66.6%,
-          #74acdf 66.6%
+          #00205b 20%,
+          #fed500 20% 40%,
+          #00205b 40% 60%,
+          #fed500 60% 80%,
+          #00205b 80%
         );
       }
-      .flag.arg::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 12px;
-        height: 12px;
-        margin: -6px 0 0 -6px;
-        border-radius: 50%;
-        background: #f6b40e;
-        border: 1.5px solid #b8860b;
-      }
-      .flag.esp {
+      .flag.gs {
         background: linear-gradient(
-          180deg,
-          #aa151b 25%,
-          #f1bf00 25% 75%,
-          #aa151b 75%
+          90deg,
+          #8a0026 50%,
+          #fdb913 50%
         );
       }
       .vs {
@@ -937,6 +931,7 @@
       }
       #checkout.done {
         background: var(--green);
+        color: var(--paper);
       }
       #checkout.done:hover {
         transform: none;
@@ -1298,16 +1293,16 @@
   <body>
     <div id="loader" aria-live="polite">
       <svg viewBox="0 0 24 24" fill="none">
-        <path d="M12 2 21 7l-9 5-9-5 9-5Z" fill="#2f9bff" />
-        <path d="M3 12l9 5 9-5" stroke="#39c4ff" stroke-width="1.6" />
+        <path d="M12 2 21 7l-9 5-9-5 9-5Z" fill="var(--yellow)" />
+        <path d="M3 12l9 5 9-5" stroke="var(--green)" stroke-width="1.6" />
         <path
           d="M3 17l9 5 9-5"
-          stroke="#39c4ff"
+          stroke="var(--green)"
           stroke-width="1.6"
           opacity=".5"
         />
       </svg>
-      <div class="lt" id="loader-text">Building the stadium…</div>
+      <div class="lt" id="loader-text">Stadyum hazırlanıyor…</div>
     </div>
 
     <canvas
@@ -1319,16 +1314,16 @@
     <nav>
       <div class="brand">
         <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 2 21 7l-9 5-9-5 9-5Z" fill="#2f9bff" />
-          <path d="M3 12l9 5 9-5" stroke="#39c4ff" stroke-width="1.6" />
+          <path d="M12 2 21 7l-9 5-9-5 9-5Z" fill="var(--yellow)" />
+          <path d="M3 12l9 5 9-5" stroke="var(--green)" stroke-width="1.6" />
           <path
             d="M3 17l9 5 9-5"
-            stroke="#39c4ff"
+            stroke="var(--green)"
             stroke-width="1.6"
             opacity=".5"
           />
         </svg>
-        StadiView
+        Chobani Arena
       </div>
       <div class="nav-links">
         <a href="#" class="active">Stadium</a>
@@ -1380,8 +1375,8 @@
           type="button"
           aria-haspopup="dialog"
           aria-controls="support-modal"
-          aria-label="Learn how to support StadiView"
-          title="Support more projects like StadiView. No pressure"
+          aria-label="Learn how to support Chobani Arena"
+          title="Support more projects like Chobani Arena. No pressure"
         >
           <svg
             viewBox="0 0 24 24"
@@ -1417,7 +1412,7 @@
         <div class="support-kicker">☕ What I want to build next</div>
         <h2 id="support-title">This stadium is only the beginning.</h2>
         <p id="support-description">
-          I want to take StadiView much further. I want real time seat previews while
+          I want to take Chobani Arena much further. I want real time seat previews while
           you’re buying, photoreal venue captures with Gaussian splatting,
           sunrise to sunset lighting, and richer atmosphere and match day
           detail.
@@ -1470,16 +1465,16 @@
     </div>
 
     <section id="match" class="card" aria-label="Upcoming match">
-      <div class="eyebrow">INTERNATIONAL FRIENDLY</div>
+      <div class="eyebrow">KITALARARASI DERBİ</div>
       <div class="teams">
         <div class="team">
-          <div class="flag arg" role="img" aria-label="Argentina flag"></div>
-          <div class="name">ARGENTINA</div>
+          <div class="flag fb" role="img" aria-label="Fenerbahçe flag"></div>
+          <div class="name">FENERBAHÇE</div>
         </div>
         <div class="vs">VS</div>
         <div class="team">
-          <div class="flag esp" role="img" aria-label="Spain flag"></div>
-          <div class="name">SPAIN</div>
+          <div class="flag gs" role="img" aria-label="Galatasaray flag"></div>
+          <div class="name">GALATASARAY</div>
         </div>
       </div>
       <div class="meta">
@@ -1492,7 +1487,7 @@
           >
             <rect x="3" y="5" width="18" height="16" rx="2" />
             <path d="M8 3v4M16 3v4M3 10h18" /></svg
-          >Demo fixture <span class="dot">·</span> 8:30 PM
+          >Süper Lig Derbisi <span class="dot">·</span> 20:00
         </div>
         <div class="row">
           <svg
@@ -1503,14 +1498,14 @@
           >
             <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" />
             <circle cx="12" cy="10" r="2.6" /></svg
-          >Metropolitano Stadium, Madrid
+          >Fenerbahçe Chobani Stadium, İstanbul
         </div>
       </div>
     </section>
 
     <section id="camcard" class="card" aria-label="Camera controls">
       <header>
-        <div class="card-title">Camera Controls</div>
+        <div class="card-title">Kamera Kontrolleri</div>
         <button class="help" id="cc-help" aria-label="Controls help">?</button>
       </header>
       <div class="cam-body">
@@ -1542,15 +1537,15 @@
             d="M9 11.2V7a3 3 0 0 1 6 0v4.2M7 11h10l-.8 8.2a2 2 0 0 1-2 1.8H9.8a2 2 0 0 1-2-1.8L7 11Z"
           />
         </svg>
-        Click and drag to rotate <span style="margin: 0 4px">·</span> Scroll to
-        zoom
+        Döndürmek için tıklayıp sürükleyin <span style="margin: 0 4px">·</span> Yakınlaşmak için
+        kaydırın
       </footer>
     </section>
 
     <div id="rightcol">
       <section id="overview" class="card" aria-label="Stadium overview">
         <header>
-          <div class="card-title">Stadium Overview</div>
+          <div class="card-title">Stadyum Genel Bakış</div>
           <button class="expand" id="ov-expand" aria-label="Reset to full view">
             <svg
               viewBox="0 0 24 24"
@@ -1572,7 +1567,7 @@
               <path
                 d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 16.9l-6.1 3.5 1.5-6.8L2.2 9l6.9-.7L12 2Z"
               /></svg
-            ><span id="p-label">SELECTED SEAT</span>
+            ><span id="p-label">SEÇİLEN KOLTUK</span>
           </div>
           <button id="fav" aria-label="Save seat to favorites">
             <svg
@@ -1587,31 +1582,31 @@
             </svg>
           </button>
         </header>
-        <div id="p-section">Section 125</div>
+        <div id="p-section">Blok 125</div>
         <div id="p-sub">
           <span id="p-tier">Lower Tier</span><span class="dot">·</span
-          ><span id="p-block">Block 125</span>
+          ><span id="p-block">Blok 125</span>
         </div>
         <div class="seat-grid">
           <div class="cell">
-            <div class="k">Row</div>
+            <div class="k">Sıra</div>
             <div class="v" id="p-row">12</div>
           </div>
           <div class="cell">
-            <div class="k">Seat</div>
+            <div class="k">Koltuk</div>
             <div class="v" id="p-seat">18</div>
           </div>
           <div class="cell">
-            <div class="k">Price</div>
+            <div class="k">Fiyat</div>
             <div class="v" id="p-price">
-              €168 <span class="unit">/seat</span>
+              ₺4200 <span class="unit">/koltuk</span>
             </div>
           </div>
         </div>
         <div class="preview">
           <img id="p-img" alt="View from the selected seat" />
-          <div class="ph" id="p-ph">Rendering seat view…</div>
-          <div class="pill tl" id="p-score">★ view</div>
+          <div class="ph" id="p-ph">Koltuk açısı yükleniyor…</div>
+          <div class="pill tl" id="p-score">★ görüş</div>
           <div class="pill br">360°</div>
         </div>
         <div class="benefits" id="benefits">
@@ -1628,7 +1623,7 @@
                 d="M4 13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3Z"
               />
               <path d="M7 18v2M17 18v2" /></svg
-            ><span class="btxt">Padded seat</span><span class="spacer"></span
+            ><span class="btxt">Konforlu koltuk</span><span class="spacer"></span
             ><svg class="check" viewBox="0 0 24 24" fill="currentColor">
               <circle cx="12" cy="12" r="10" opacity=".22" />
               <path
@@ -1650,7 +1645,7 @@
             >
               <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
               <circle cx="12" cy="12" r="2.8" /></svg
-            ><span class="btxt">Great view</span><span class="spacer"></span
+            ><span class="btxt">Harika görüş açısı</span><span class="spacer"></span
             ><svg class="check" viewBox="0 0 24 24" fill="currentColor">
               <circle cx="12" cy="12" r="10" opacity=".22" />
               <path
@@ -1674,7 +1669,7 @@
                 d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.5a2.5 2.5 0 0 0 0 5V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.5a2.5 2.5 0 0 0 0-5V8Z"
               />
               <path d="M13 6v12" stroke-dasharray="2.4 2.4" /></svg
-            ><span class="btxt">Food &amp; drink voucher</span
+            ><span class="btxt">Yiyecek &amp; İçecek kuponu</span
             ><span class="spacer"></span
             ><svg class="check" viewBox="0 0 24 24" fill="currentColor">
               <circle cx="12" cy="12" r="10" opacity=".22" />
@@ -1689,7 +1684,7 @@
           </div>
         </div>
         <button id="checkout">
-          <span id="checkout-label">Grab seat</span>
+          <span id="checkout-label">Koltuğu Seç</span>
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -1708,7 +1703,7 @@
           >
             <rect x="4" y="10" width="16" height="10" rx="2" />
             <path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg
-          >Concept demo · no real ticket sales
+          >Konsept demo · gerçek bilet satışı değildir
         </div>
       </section>
     </div>
@@ -1748,7 +1743,7 @@
       <button class="dock-btn" id="d-zin" aria-label="Zoom in">+</button>
     </div>
 
-    <div id="sb-hint">Drag to look around · scroll to zoom</div>
+    <div id="sb-hint">Bakmak için sürükleyin · yakınlaşmak için kaydırın</div>
     <div id="backbar" role="toolbar" aria-label="Seat view controls">
       <button id="bk-exit">
         <svg
@@ -1758,7 +1753,7 @@
           stroke-width="2.2"
         >
           <path d="M19 12H5M11 6l-6 6 6 6" /></svg
-        >Back to stadium
+        >Tribüne Geri Dön
       </button>
       <button id="bk-snd" aria-label="Toggle stadium sound">
         <svg
@@ -1774,8 +1769,8 @@
     </div>
 
     <div id="tip" aria-hidden="true">
-      <div class="t1" id="tip1">Section · Row · Seat</div>
-      <div class="t2" id="tip2">€ pending</div>
+      <div class="t1" id="tip1">Blok · Sıra · Koltuk</div>
+      <div class="t2" id="tip2">₺ bekliyor</div>
     </div>
     <div id="toast" role="status"></div>
 
@@ -2345,15 +2340,15 @@
             x.font = "700 40px " + getComputedStyle(document.body).fontFamily;
             x.textBaseline = "middle";
             const words = [
-              "STADIVIEW",
-              "EXPERIENCE EVERY SEAT",
-              "MATCHDAY LIVE",
-              "ARGENTINA × SPAIN",
+              "CHOBANI ARENA",
+              "YASA SEVGİNİ EN YAKINDAN",
+              "DERBİ GÜNÜ CANLI",
+              "FENERBAHÇE × GALATASARAY",
             ];
             let cx = 30;
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
-              x.fillStyle = i % 2 ? "#2f9bff" : "#9fd3ff";
+              x.fillStyle = i % 2 ? "#fed500" : "#faf6ed";
               x.fillText(t, cx, h / 2 + 2);
               cx += x.measureText(t).width + 120;
             }
@@ -2396,34 +2391,34 @@
         const kits = [
           {
             shirt: new THREE.MeshLambertMaterial({
-              color: 0x9fd8ff,
-              emissive: 0x9fd8ff,
-              emissiveIntensity: 0.12,
+              color: 0xfed500, // Fenerbahce Yellow
+              emissive: 0xfed500,
+              emissiveIntensity: 0.1,
             }),
-            shorts: new THREE.MeshLambertMaterial({ color: 0xf2f4f8 }),
+            shorts: new THREE.MeshLambertMaterial({ color: 0x00205b }), // Fenerbahce Navy Blue
             gk: new THREE.MeshLambertMaterial({
-              color: 0x2fbf71,
-              emissive: 0x2fbf71,
+              color: 0x00ffcc,
+              emissive: 0x00ffcc,
               emissiveIntensity: 0.12,
             }),
           },
           {
             shirt: new THREE.MeshLambertMaterial({
-              color: 0xd92626,
-              emissive: 0xd92626,
-              emissiveIntensity: 0.12,
+              color: 0xa90429, // Galatasaray Red
+              emissive: 0xa90429,
+              emissiveIntensity: 0.1,
             }),
-            shorts: new THREE.MeshLambertMaterial({ color: 0x232360 }),
+            shorts: new THREE.MeshLambertMaterial({ color: 0xfdb913 }), // Galatasaray Yellow
             gk: new THREE.MeshLambertMaterial({
-              color: 0xe8c53a,
-              emissive: 0xe8c53a,
+              color: 0xff6b00,
+              emissive: 0xff6b00,
               emissiveIntensity: 0.12,
             }),
           },
           {
             shirt: new THREE.MeshLambertMaterial({
-              color: 0xf2e341,
-              emissive: 0xf2e341,
+              color: 0xbdfd00, // Neon Green Referee
+              emissive: 0xbdfd00,
               emissiveIntensity: 0.1,
             }),
             shorts: new THREE.MeshLambertMaterial({ color: 0x141414 }),
@@ -2609,10 +2604,9 @@
       function onBallArrive() {
         if (match.shot) {
           const scoringTeam = teamOf(match.holder);
-          if (rng() < 0.6) {
+          if (scoringTeam === 0 && score.home < 6 && rng() < 0.6) {
             // goal
-            if (scoringTeam === 0) score.home++;
-            else score.away++;
+            score.home++;
             match.scoredBy = scoringTeam;
             match.celebrate = 2.6;
             exciteU.value = 2.4;
@@ -2640,7 +2634,7 @@
       /* ---------- tier definitions ---------- */
       const TIERS = [
         {
-          name: "Lower Tier",
+          name: "Maraton Alt Tribün",
           first: 101,
           sections: 32,
           rows: 18,
@@ -2652,7 +2646,7 @@
           palette: "rainbow",
         },
         {
-          name: "Club Tier",
+          name: "Chobani VIP Tribün",
           first: 201,
           sections: 24,
           rows: 12,
@@ -2664,7 +2658,7 @@
           palette: "steel",
         },
         {
-          name: "Upper Tier",
+          name: "Maraton Üst Tribün",
           first: 301,
           sections: 32,
           rows: 16,
@@ -2891,14 +2885,14 @@
             x.textBaseline = "middle";
             let cx = 40;
             const words = [
-              "ARGENTINA VS SPAIN",
-              "INTERNATIONAL FRIENDLY",
-              "METROPOLITANO · MADRID",
-              "KICK OFF 8.30 PM",
+              "FENERBAHÇE VS GALATASARAY",
+              "TRENDYOL SÜPER LİG",
+              "CHOBANI ARENA · ISTANBUL",
+              "KICK OFF 20.00",
             ];
             for (let i = 0; i < 8; i++) {
               const t = words[i % words.length];
-              x.fillStyle = i % 2 ? "#39c4ff" : "#dff0ff";
+              x.fillStyle = i % 2 ? "#fed500" : "#ffffff";
               x.fillText(t, cx, h / 2 + 1);
               cx += x.measureText(t).width + 130;
             }
@@ -3152,22 +3146,22 @@
           x.fillStyle = "#dff0ff";
           x.font = "800 130px " + f;
           x.fillText(
-            "ARG  " + score.home + " · " + score.away + "  ESP",
+            "FB  " + score.home + " · " + score.away + "  GS",
             w / 2,
             215,
           );
-          x.fillStyle = "#39c4ff";
+          x.fillStyle = "#fed500";
           x.font = "700 60px " + f;
           x.fillText(
             score.minute < 90
               ? "LIVE \u00b7 " + score.minute + "'"
-              : "FULL TIME",
+              : "MAÇ SONU",
             w / 2,
             335,
           );
-          x.fillStyle = "#5b6a85";
+          x.fillStyle = "#faf6ed";
           x.font = "600 44px " + f;
-          x.fillText("INTERNATIONAL FRIENDLY", w / 2, 425);
+          x.fillText("TRENDYOL SÜPER LİG", w / 2, 425);
           sbTex.needsUpdate = true;
         };
         drawScoreboard();
@@ -3237,16 +3231,13 @@
         "#eab308",
       ];
       function sectionBaseColor(tier, k) {
-        if (tier.palette === "rainbow")
-          return new THREE.Color(RAINBOW[k % RAINBOW.length]);
-        if (tier.palette === "steel") {
-          const c = new THREE.Color(0x2e4a78);
-          c.offsetHSL(((k % 5) - 2) * 0.012, 0, ((k % 3) - 1) * 0.03);
-          return c;
+        if (tier.palette === "rainbow") {
+          return k % 2 === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
         }
-        const c = new THREE.Color(0x27306a);
-        c.offsetHSL(((k % 7) - 3) * 0.01, 0, ((k % 4) - 1.5) * 0.02);
-        return c;
+        if (tier.palette === "steel") {
+          return k % 2 === 0 ? new THREE.Color(0x004733) : new THREE.Color(0xfbf8f3);
+        }
+        return k % 2 === 0 ? new THREE.Color(0x00205b) : new THREE.Color(0xfed500);
       }
 
       /* arc-length table for an ellipse */
@@ -3491,15 +3482,15 @@
         const dm = new THREE.Object3D(),
           cc = new THREE.Color();
         const cloth = [
-          "#10182b",
-          "#141414",
-          "#e7e4da",
-          "#75809a",
-          "#a92322",
-          "#6fb1e4",
-          "#d9b02f",
-          "#274e13",
-          "#5b2a86",
+          "#00205b", // Fenerbahce Navy
+          "#fed500", // Fenerbahce Yellow
+          "#ffffff", // White
+          "#00205b",
+          "#fed500",
+          "#004733", // Chobani Green
+          "#faf6ed", // Chobani Cream
+          "#00205b",
+          "#fed500",
         ];
         const skinTones = [
           "#8d5a3b",
@@ -3588,18 +3579,18 @@
           (s) => 70 + s * 1.3,
           (s) => 24 + s * 0.75,
         ][t];
-        return Math.round(f(score));
+        return Math.round(f(score) * 25);
       }
       function scoreLabel(s) {
         return s >= 90
-          ? "Excellent view"
+          ? "Mükemmel görüş"
           : s >= 80
-            ? "Great view"
+            ? "Harika görüş"
             : s >= 70
-              ? "Good view"
+              ? "İyi görüş"
               : s >= 58
-                ? "Fair view"
-                : "Restricted view";
+                ? "Orta görüş"
+                : "Kısıtlı görüş";
       }
       function seatInfo(i) {
         const sec = sections[meta.secIdx[i]],
@@ -3838,15 +3829,15 @@
       }
       function showTip(x, y, info) {
         ui.tip1.textContent =
-          "Section " +
+          "Blok " +
           info.label +
-          " · Row " +
+          " · Sıra " +
           info.row +
-          " · Seat " +
+          " · Koltuk " +
           info.seat;
         ui.tip2.textContent = info.avail
-          ? "€" + info.price + " · " + info.score + "% view"
-          : "Unavailable";
+          ? "₺" + info.price + " · " + info.score + "% görüş"
+          : "Dolu";
         ui.tip2.style.color = info.avail ? "" : "#8a8478";
         ui.tip.style.left =
           Math.min(x, innerWidth - ui.tip.offsetWidth - 40) + "px";
@@ -3859,25 +3850,25 @@
 
       /* ---------- seat panel ---------- */
       const TIER_BENEFITS = [
-        ["Padded seat", "Great view", "Food & drink voucher"],
-        ["Lounge access", "Halftime table service", "Padded club seat"],
-        ["Full pitch view", "Budget friendly", "Fast concourse access"],
+        ["Konforlu koltuk", "Harika görüş açısı", "Yiyecek & İçecek kuponu"],
+        ["VIP Lounge erişimi", "Devre arası ikram servisi", "Deri VIP koltuk"],
+        ["Geniş saha görüşü", "Bütçe dostu", "Hızlı giriş-çıkış"],
       ];
       function updatePanel(info, state) {
         ui.pLabel.textContent =
           state === "confirmed"
-            ? "SEAT CONFIRMED"
+            ? "KOLTUK AYRILDI"
             : state === "previewing"
-              ? "PREVIEWING SEAT"
-              : "SUGGESTED SEAT";
-        ui.pSection.textContent = "Section " + info.label;
+              ? "KOLTUK ÖNİZLEME"
+              : "ÖNERİLEN KOLTUK";
+        ui.pSection.textContent = "Blok " + info.label;
         ui.pTier.textContent = info.tier;
-        ui.pBlock.textContent = "Block " + info.label;
+        ui.pBlock.textContent = "Blok " + info.label;
         ui.pRow.textContent = info.row;
         ui.pSeat.textContent = info.seat;
         ui.pPrice.innerHTML =
-          "€" + info.price + ' <span class="unit">/seat</span>';
-        ui.pScore.textContent = "★ " + info.score + "% view";
+          "₺" + info.price + ' <span class="unit">/koltuk</span>';
+        ui.pScore.textContent = "★ " + info.score + "% görüş";
         const b = TIER_BENEFITS[info.sec.tier];
         ui.benefits.forEach((el, k) => (el.textContent = b[k]));
         ui.checkout.classList.toggle("done", state === "confirmed");
@@ -3922,7 +3913,9 @@
 
       /* ---------- crowd audio (synthesised, no assets) ---------- */
       let AC = null,
-        crowdGain = null;
+        crowdGain = null,
+        chantAudio = null,
+        chantGain = null;
       function ensureAudio() {
         if (AC) return;
         try {
@@ -3953,6 +3946,21 @@
         bp.connect(crowdGain);
         crowdGain.connect(AC.destination);
         src.start();
+
+        // Chobani Arena background tribün tezahürat sesi
+        try {
+          chantAudio = new Audio("chant.mp3");
+          chantAudio.loop = true;
+          chantAudio.crossOrigin = "anonymous";
+          chantGain = AC.createGain();
+          chantGain.gain.value = 0;
+          const chantSrc = AC.createMediaElementSource(chantAudio);
+          chantSrc.connect(chantGain);
+          chantGain.connect(AC.destination);
+          chantAudio.play().catch(e => console.log("Tezahürat sesi oynatılamadı (etkileşim bekleniyor):", e));
+        } catch (err) {
+          console.warn("Tezahürat ses sistemi başlatılamadı:", err);
+        }
       }
       function setCrowd(level) {
         if (!AC) return;
@@ -3961,6 +3969,14 @@
           muted ? 0.0001 : level,
           AC.currentTime + 1.4,
         );
+        if (chantGain) {
+          chantGain.gain.cancelScheduledValues(AC.currentTime);
+          const chantVol = muted ? 0.0001 : (level === 0.02 ? 0.18 : 0.65);
+          chantGain.gain.linearRampToValueAtTime(
+            chantVol,
+            AC.currentTime + 1.4,
+          );
+        }
       }
       function cheer() {
         if (!AC || muted) return;
@@ -4230,10 +4246,10 @@
               }
               if (found >= 0) {
                 toast(
-                  "That seat is taken. Showing the nearest free one in the row",
+                  "Bu koltuk dolu. Sıradaki en yakın boş koltuk gösteriliyor.",
                 );
                 flyToSeat(found);
-              } else toast("That row is sold out. Try another one");
+              } else toast("Bu sıra tamamen dolu. Başka bir sırayı deneyin.");
             }
           }
         }
@@ -4296,13 +4312,13 @@
         updatePanel(currentInfo, "confirmed");
         cheer();
         toast(
-          "Section " +
+          "Blok " +
             currentInfo.label +
-            " · Row " +
+            " · Sıra " +
             currentInfo.row +
-            " · Seat " +
+            " · Koltuk " +
             currentInfo.seat +
-            " is yours",
+            " sizin!",
         );
       }
       ui.bkExit.addEventListener("click", exitSeatMode);
@@ -4313,7 +4329,7 @@
       });
       $("checkout").addEventListener("click", () => {
         if (confirmed) {
-          toast("Seat secured. Checkout isn’t wired in this demo", 3000);
+          toast("Koltuk rezerve edildi. Bu demoda ödeme sistemi aktif değildir.", 3000);
           return;
         }
         if (mode === "seat") {
@@ -4321,7 +4337,7 @@
           return;
         }
         if (selectedIdx >= 0 && mode === "orbit") {
-          toast("Taking you there first. Grab it once you like the view");
+          toast("Sizi önce koltuğa götürüyoruz. Görüşü beğenirseniz seçebilirsiniz.");
           flyToSeat(selectedIdx);
         }
       });
@@ -4358,12 +4374,12 @@
       $("d-zout").addEventListener("click", () => zoomBy(1.16));
       $("cc-help").addEventListener("click", () =>
         toast(
-          "Drag to rotate · Scroll to zoom · Click any seat to preview its view",
+          "Döndürmek için sürükleyin · Yakınlaşmak için kaydırın · Görüşü önizlemek için bir koltuğa tıklayın",
           3600,
         ),
       );
       $("d-vr").addEventListener("click", () =>
-        toast("VR mode needs a WebXR headset. It is not in this build"),
+        toast("VR modu için bir WebXR gözlüğü gereklidir. Bu sürümde aktif değil."),
       );
       ui.d3d.addEventListener("click", () => {
         if (mode !== "orbit") return;
@@ -4604,6 +4620,10 @@
         exciteU.value += (1 - exciteU.value) * Math.min(1, dt * 0.55);
         match.celebrate = Math.max(0, match.celebrate - dt);
         score.minute = Math.min(90, Math.floor(t / 2.2));
+        if (score.minute >= 90) {
+          score.home = 6;
+          score.away = 0;
+        }
         if ((t | 0) % 5 === 0 && (t | 0) !== lastMinDraw) {
           lastMinDraw = t | 0;
           drawScoreboard();
@@ -4796,7 +4816,7 @@
           setTimeout(() => {
             captureView(featuredIdx);
             document.getElementById("loader").classList.add("hide");
-            toast("Click any seat to see the match from it", 3800);
+            toast("Koltuk görüş açısını görmek için herhangi bir koltuğa tıklayın", 3800);
           }, 60);
         }
       }
