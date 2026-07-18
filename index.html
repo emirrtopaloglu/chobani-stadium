@@ -544,6 +544,78 @@
         margin: 0 2px;
       }
 
+      /* ---------- fan controls ---------- */
+      #fancard {
+        bottom: 250px;
+        left: 26px;
+        width: 302px;
+        padding: 15px 17px;
+        z-index: 10;
+      }
+      @media (max-width: 1180px) {
+        #fancard {
+          display: none;
+        }
+      }
+      .fan-body {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 5px;
+      }
+      .fan-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .fan-row label {
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: var(--ink);
+        letter-spacing: 0.05em;
+      }
+      .fan-btn {
+        width: 100%;
+        padding: 9px 12px;
+        border: 2.5px solid var(--ink);
+        border-radius: 9px;
+        background: var(--yellow);
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.12s, box-shadow 0.12s, background-color 0.12s;
+        text-align: center;
+      }
+      .fan-btn:hover {
+        transform: translate(-1.5px, -1.5px);
+        box-shadow: var(--shadow-md);
+      }
+      .fan-btn.active {
+        background: #4ade80; /* Light green on active */
+      }
+      #fan-fill-slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 10px;
+        border: 2.5px solid var(--ink);
+        border-radius: 5px;
+        background: var(--paper-2);
+        outline: none;
+      }
+      #fan-fill-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2.5px solid var(--ink);
+        border-radius: 50%;
+        background: var(--yellow);
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+      }
+
       /* ---------- camera controls ---------- */
       #camcard {
         bottom: 26px;
@@ -1470,6 +1542,22 @@
             <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z" />
             <circle cx="12" cy="10" r="2.6" /></svg
           >Fenerbahçe Chobani Stadium, İstanbul
+        </div>
+      </div>
+    </section>
+
+    <section id="fancard" class="card" aria-label="Fan controls">
+      <header>
+        <div class="card-title">Taraftar Kontrolleri</div>
+      </header>
+      <div class="fan-body">
+        <div class="fan-row">
+          <label for="fan-jump-btn">Zıplama Efekti:</label>
+          <button class="fan-btn" id="fan-jump-btn" type="button">Zıplamayı Başlat</button>
+        </div>
+        <div class="fan-row">
+          <label for="fan-fill-slider" id="fan-fill-label">Doluluk Oranı: %75</label>
+          <input type="range" id="fan-fill-slider" min="10" max="100" value="75" step="5">
         </div>
       </div>
     </section>
@@ -3245,9 +3333,38 @@
         "#22c55e",
         "#eab308",
       ];
+      function isLetterPixel(char, px, py) {
+        // px: 0 to 6 (sol-sağ), py: 0 to 9 (aşağı-yukarı)
+        switch(char) {
+          case 'F':
+            return (px === 0) || (py === 9) || (py === 5 && px <= 4);
+          case 'E':
+            return (px === 0) || (py === 9) || (py === 0) || (py === 5 && px <= 4);
+          case 'N':
+            return (px === 0) || (px === 6) || (py === 9 - px);
+          case 'R':
+            return (px === 0) || (py === 9) || (px === 6 && py >= 5) || (py === 5) || (py < 5 && px === py + 1);
+          case 'B':
+            return (px === 0) || (py === 9 && px < 6) || (py === 0 && px < 6) || (py === 5 && px < 6) || (px === 6 && py !== 0 && py !== 5 && py !== 9);
+          case 'A':
+            return (px === 0 && py < 9) || (px === 6 && py < 9) || (py === 9 && px > 0 && px < 6) || (py === 5);
+          case 'H':
+            return (px === 0) || (px === 6) || (py === 5);
+          case 'Ç':
+            if (px === 0) return py >= 1 && py <= 8;
+            if (py === 9 || py === 1) return px >= 1;
+            if (px === 3 && py === 0) return true; // Ç kuyruğu
+            return false;
+          default:
+            return false;
+        }
+      }
+
       function sectionBaseColor(tier, k) {
-        // Tüm stadyum tribün koltukları dikey Sarı-Lacivert bloklar halinde boyanır
-        return k % 2 === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
+        // Alt kat ve Üst kat renkleri terslenir (Chessboard Sarı-Lacivert deseni)
+        const isLower = (tier.first === 101);
+        const colorIndex = isLower ? (k % 2 === 0 ? 0 : 1) : (k % 2 === 0 ? 1 : 0);
+        return colorIndex === 0 ? new THREE.Color(0xfed500) : new THREE.Color(0x00205b);
       }
 
       /* arc-length table for an ellipse */
@@ -3398,14 +3515,32 @@
                 const unavailable =
                   rr < 0.45 &&
                   !(label === 125 && r + 1 === 12 && Math.abs(q + 1 - 18) <= 2);
-                jitter
-                  .copy(base)
-                  .offsetHSL(
-                    (rng() - 0.5) * 0.02,
-                    (rng() - 0.5) * 0.08,
-                    (rng() - 0.5) * 0.16,
-                  );
-                if (unavailable) jitter.multiplyScalar(0.82);
+                let isLetter = false;
+                const secK = label - tier.first;
+                if (ti === 1 && secK >= 3 && secK <= 12) {
+                  const chars = ["F", "E", "N", "E", "R", "B", "A", "H", "Ç", "E"];
+                  const char = chars[secK - 3];
+                  const py = r - 6;
+                  const mid = Math.floor(R.n / 2);
+                  const px = q - (mid - 3);
+                  if (px >= 0 && px <= 6 && py >= 0 && py <= 9) {
+                    if (isLetterPixel(char, px, py)) {
+                      isLetter = true;
+                    }
+                  }
+                }
+                if (isLetter) {
+                  jitter.set(0xffffff);
+                } else {
+                  jitter
+                    .copy(base)
+                    .offsetHSL(
+                      (rng() - 0.5) * 0.02,
+                      (rng() - 0.5) * 0.08,
+                      (rng() - 0.5) * 0.16,
+                    );
+                  if (unavailable) jitter.multiplyScalar(0.82);
+                }
                 seatMesh.setColorAt(idx, jitter);
                 baseColors[idx * 3] = jitter.r;
                 baseColors[idx * 3 + 1] = jitter.g;
@@ -3448,11 +3583,11 @@
       }
       scene.add(seatMesh);
 
-      /* ---------- seated crowd with a person on every sold seat ---------- */
-      {
-        const occ = [];
-        for (let i = 0; i < SEAT_COUNT; i++) if (!meta.avail[i]) occ.push(i);
-        const torsoGeo = (() => {
+      /* ---------- seated crowd builder (dynamic fill rate support) ---------- */
+      let torsoGeo = null, headGeo = null, torsoMat = null, headMat = null;
+      function setupCrowdGeometries() {
+        if (torsoGeo) return;
+        torsoGeo = (() => {
           const body = new THREE.BoxGeometry(0.42, 0.52, 0.26);
           body.translate(0, 0.73, -0.05);
           const lap = new THREE.BoxGeometry(0.4, 0.13, 0.34);
@@ -3461,12 +3596,12 @@
           arms.translate(0, 0.6, -0.03);
           return mergeBoxes([body, lap, arms]);
         })();
-        const headGeo = new THREE.SphereGeometry(0.135, 7, 5);
+        headGeo = new THREE.SphereGeometry(0.135, 7, 5);
         headGeo.translate(0, 1.1, -0.05);
-        const torsoMat = new THREE.MeshLambertMaterial(),
-          headMat = new THREE.MeshLambertMaterial();
+        torsoMat = new THREE.MeshLambertMaterial();
+        headMat = new THREE.MeshLambertMaterial();
+
         function swayify(mat, amp) {
-          // gentle idle sway, amplified briefly on goals
           mat.onBeforeCompile = (sh) => {
             sh.uniforms.uTime = swayU;
             sh.uniforms.uExcite = exciteU;
@@ -3486,10 +3621,32 @@
         }
         swayify(torsoMat, "0.03");
         swayify(headMat, "0.05");
+      }
+
+      window.rebuildCrowd = function(rate) {
+        setupCrowdGeometries();
+
+        if (window.crowdData) {
+          scene.remove(window.crowdData.torso);
+          scene.remove(window.crowdData.heads);
+          window.crowdData.torso.geometry.dispose();
+          window.crowdData.heads.geometry.dispose();
+          window.crowdData = null;
+        }
+
+        const occ = [];
+        for (let i = 0; i < SEAT_COUNT; i++) {
+          const seatHash = ((i * 37) % 100) / 100;
+          if (seatHash < rate) {
+            occ.push(i);
+          }
+        }
+
         const torso = new THREE.InstancedMesh(torsoGeo, torsoMat, occ.length);
         const heads = new THREE.InstancedMesh(headGeo, headMat, occ.length);
         torso.frustumCulled = false;
         heads.frustumCulled = false;
+
         const dm = new THREE.Object3D(),
           cc = new THREE.Color();
         const cloth = [
@@ -3498,8 +3655,8 @@
           "#ffffff", // White
           "#00205b",
           "#fed500",
-          "#ffffff", // White
-          "#ffffff", // White
+          "#ffffff",
+          "#ffffff",
           "#00205b",
           "#fed500",
         ];
@@ -3511,33 +3668,73 @@
           "#a5714b",
           "#e2ac86",
         ];
+
+        window.crowdData = {
+          occ: occ,
+          torso: torso,
+          heads: heads,
+          positions: new Float32Array(occ.length * 3),
+          yaws: new Float32Array(occ.length),
+          scales: new Float32Array(occ.length)
+        };
+
         occ.forEach((si, k) => {
-          dm.position.set(
-            meta.pos[si * 3],
-            meta.pos[si * 3 + 1],
-            meta.pos[si * 3 + 2],
-          );
-          dm.rotation.set(0, meta.yaw[si] + (rng() - 0.5) * 0.3, 0);
+          const x = meta.pos[si * 3];
+          const y = meta.pos[si * 3 + 1];
+          const z = meta.pos[si * 3 + 2];
+          const yaw = meta.yaw[si] + (rng() - 0.5) * 0.3;
           const sc = 0.92 + rng() * 0.14;
+
+          window.crowdData.positions[k * 3] = x;
+          window.crowdData.positions[k * 3 + 1] = y;
+          window.crowdData.positions[k * 3 + 2] = z;
+          window.crowdData.yaws[k] = yaw;
+          window.crowdData.scales[k] = sc;
+
+          dm.position.set(x, y, z);
+          dm.rotation.set(0, yaw, 0);
           dm.scale.set(sc, sc, sc);
           dm.updateMatrix();
           torso.setMatrixAt(k, dm.matrix);
           heads.setMatrixAt(k, dm.matrix);
+
           const sec = sections[meta.secIdx[si]],
             tr = TIERS[sec.tier];
-          if (rng() < 0.35)
-            cc.copy(sectionBaseColor(tr, sec.label - tr.first)).offsetHSL(
+
+          let isLetter = false;
+          const r = meta.row[si] - 1;
+          const q = meta.seatNum[si] - 1;
+          const secK = sec.label - tr.first;
+          if (sec.tier === 1 && secK >= 3 && secK <= 12) {
+            const chars = ["F", "E", "N", "E", "R", "B", "A", "H", "Ç", "E"];
+            const char = chars[secK - 3];
+            const py = r - 6;
+            const mid = Math.floor(layout[1][r].n / 2);
+            const px = q - (mid - 3);
+            if (px >= 0 && px <= 6 && py >= 0 && py <= 9) {
+              if (isLetterPixel(char, px, py)) {
+                isLetter = true;
+              }
+            }
+          }
+
+          if (isLetter) {
+            cc.set(0xffffff); // Harfler üzerindeki seyirciler beyaz giyer
+          } else if (rng() < 0.35) {
+            cc.copy(sectionBaseColor(tr, secK)).offsetHSL(
               0,
               (rng() - 0.5) * 0.1,
               (rng() - 0.5) * 0.15,
             );
-          else
+          } else {
             cc.set(cloth[(rng() * cloth.length) | 0]).offsetHSL(
               0,
               0,
               (rng() - 0.5) * 0.1,
             );
+          }
           torso.setColorAt(k, cc);
+
           cc.set(skinTones[(rng() * skinTones.length) | 0]).offsetHSL(
             0,
             0,
@@ -3545,15 +3742,20 @@
           );
           heads.setColorAt(k, cc);
         });
+
         torso.instanceMatrix.needsUpdate = true;
         heads.instanceMatrix.needsUpdate = true;
         if (torso.instanceColor) torso.instanceColor.needsUpdate = true;
         if (heads.instanceColor) heads.instanceColor.needsUpdate = true;
+
         scene.add(torso);
         scene.add(heads);
         document.getElementById("loader-text").textContent =
           "Seating " + occ.length.toLocaleString() + " fans…";
-      }
+      };
+
+      // İlk doluluk oranı %75 olarak yüklenir
+      window.rebuildCrowd(0.75);
       const pickScene = new THREE.Scene();
       pickScene.background = new THREE.Color(0x000000);
       pickScene.add(pickMesh);
@@ -4771,6 +4973,38 @@
       }
 
       /* ---------- main loop ---------- */
+      let jumpingEnabled = false;
+      function updateCrowdJumping(t) {
+        if (!window.crowdData) return;
+        const { occ, torso, heads, positions, yaws, scales } = window.crowdData;
+        const dm = new THREE.Object3D();
+        const enabled = jumpingEnabled;
+
+        for (let k = 0; k < occ.length; k++) {
+          const x = positions[k * 3];
+          const yOrig = positions[k * 3 + 1];
+          const z = positions[k * 3 + 2];
+          const yaw = yaws[k];
+          const sc = scales[k];
+
+          let y = yOrig;
+          if (enabled) {
+            const phase = x * 0.08 + z * 0.08 + k * 0.15;
+            const jump = Math.max(0, Math.sin(t * 8 + phase)) * 0.65;
+            y += jump;
+          }
+
+          dm.position.set(x, y, z);
+          dm.rotation.set(0, yaw, 0);
+          dm.scale.set(sc, sc, sc);
+          dm.updateMatrix();
+          torso.setMatrixAt(k, dm.matrix);
+          heads.setMatrixAt(k, dm.matrix);
+        }
+        torso.instanceMatrix.needsUpdate = true;
+        heads.instanceMatrix.needsUpdate = true;
+      }
+
       const clock = new THREE.Clock();
       let firstFrame = true;
       function animate() {
@@ -4781,6 +5015,7 @@
         // scrolling LED textures
         for (const a of animatedTextures) a.t.offset.x += a.speed * dt * 10;
         updateMatch(t, dt);
+        updateCrowdJumping(t);
         if (mode === "orbit") {
           if (!userInteracted && !REDUCED) orbit.thetaT += dt * 0.016;
           const k = REDUCED ? 1 : Math.min(1, dt * 5.5);
@@ -4838,6 +5073,33 @@
       updatePanel(currentInfo, "suggested");
       drawOverviewBase();
       applyOrbit();
+
+      // Taraftar Kontrolleri Event Listeners
+      const fanJumpBtn = document.getElementById("fan-jump-btn");
+      const fanFillSlider = document.getElementById("fan-fill-slider");
+      const fanFillLabel = document.getElementById("fan-fill-label");
+
+      if (fanJumpBtn) {
+        fanJumpBtn.addEventListener("click", () => {
+          jumpingEnabled = !jumpingEnabled;
+          if (jumpingEnabled) {
+            fanJumpBtn.classList.add("active");
+            fanJumpBtn.textContent = "Zıplamayı Durdur";
+          } else {
+            fanJumpBtn.classList.remove("active");
+            fanJumpBtn.textContent = "Zıplamayı Başlat";
+          }
+        });
+      }
+
+      if (fanFillSlider && fanFillLabel) {
+        fanFillSlider.addEventListener("input", (e) => {
+          const rate = parseFloat(e.target.value) / 100;
+          fanFillLabel.textContent = `Doluluk Oranı: %${e.target.value}`;
+          window.rebuildCrowd(rate);
+        });
+      }
+
       animate();
     </script>
   </body>
