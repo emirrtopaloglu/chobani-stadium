@@ -3175,58 +3175,6 @@
           console.warn("Roof lettering meshes creation failed", e);
         }
 
-        // Add 3D Corner Screen presenting the Gemini-generated image (Şükrü Saracoğlu Style)
-        try {
-          const bannerTex = new THREE.TextureLoader().load("gemini-banner.png");
-          bannerTex.encoding = THREE.sRGBEncoding;
-          
-          const screenGroup = new THREE.Group();
-          
-          // 1. Steel Frame Backing
-          const frameGeo = new THREE.BoxGeometry(20, 12, 0.8);
-          const frameMat = new THREE.MeshLambertMaterial({ color: 0x1a2236 }); // Dark metallic steel
-          const frame = new THREE.Mesh(frameGeo, frameMat);
-          screenGroup.add(frame);
-          
-          // 2. LED screen panel
-          const ledGeo = new THREE.PlaneGeometry(19.2, 11.2);
-          const ledMat = new THREE.MeshBasicMaterial({
-            map: bannerTex,
-            side: THREE.DoubleSide,
-            toneMapped: false
-          });
-          const led = new THREE.Mesh(ledGeo, ledMat);
-          led.position.z = 0.41; // position on frame face
-          screenGroup.add(led);
-          
-          // 3. Thick border frame details (top, bottom, sides)
-          const borderTop = new THREE.Mesh(new THREE.BoxGeometry(20.4, 0.6, 1), frameMat);
-          borderTop.position.set(0, 6, 0);
-          screenGroup.add(borderTop);
-          
-          const borderBottom = new THREE.Mesh(new THREE.BoxGeometry(20.4, 0.6, 1), frameMat);
-          borderBottom.position.set(0, -6, 0);
-          screenGroup.add(borderBottom);
-          
-          // 4. Support lattice pillars behind the screen
-          const pillarGeo = new THREE.BoxGeometry(1.2, 18, 1.2);
-          const pillar1 = new THREE.Mesh(pillarGeo, frameMat);
-          pillar1.position.set(-6, -8, -1);
-          screenGroup.add(pillar1);
-          
-          const pillar2 = new THREE.Mesh(pillarGeo, frameMat);
-          pillar2.position.set(6, -8, -1);
-          screenGroup.add(pillar2);
-
-          // Position the screen group in the North-West corner
-          // At height y = 18, angled at 45 degrees towards the center of the field
-          screenGroup.position.set(-82, 18, 64);
-          screenGroup.rotation.y = Math.PI / 4; // rotated towards the pitch
-          
-          scene.add(screenGroup);
-        } catch (err) {
-          console.warn("Corner screen mesh creation failed", err);
-        }
       }
 
       /* ---------- volumetric floodlight cones ---------- */
